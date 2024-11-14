@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Result</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon/logo.ico') }}">
+
+    <style>
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    background-color: #FAFAFA;
+    font-family: 'Poppins', sans-serif;
+    padding-top: 70px; /* Adjust for navbar height */
+    margin: 0;
+    position: relative; /* For background image layering */
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('{{ url_for('static', filename='images/bodyback.jpeg') }}') no-repeat center center fixed;
+    background-size: cover;
+    opacity: 0.2; /* Reduced opacity for the background image */
+    z-index: -1; /* Ensure the background is behind the content */
+}
+
+.form-container {
+    width: 100%;
+    max-width: 1200px; /* Set maximum width */
+    margin: 0 auto; /* Center horizontally */
+    padding: 20px; /* Optional: add padding if needed */
+    background-color: #FAFAFA;
+    border-radius: 10px; /* Optional: add rounded corners */
+    display: flex;
+    flex-direction: column; /* Arrange items in a column */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    z-index: 1; /* Ensure content is above the background */
+}
+
+
+        .image-container img {
+            max-width: 90%;
+            max-height: 50%;
+            object-fit: contain; /* Ensures the image fits within the container */
+            display: block;
+            margin: 0 auto;
+        }
+
+        .results-container {
+            width: 100%;
+            max-width: 600px; /* Set maximum width for results container */
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center-align text */
+        }
+
+        .results-container h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .results-container ul {
+            list-style-type: none;
+            padding-left: 0;
+            text-align: left; /* Align list text to the left */
+        }
+
+        .results-container li {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .results-container h2 {
+                font-size: 20px;
+            }
+
+            .results-container li {
+                font-size: 16px;
+            }
+
+            .form-container {
+                padding: 10px;
+            }
+
+            .image-container {
+                max-width: 100%; /* Adjust width for smaller screens */
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .results-container h2 {
+                font-size: 18px;
+            }
+
+            .results-container li {
+                font-size: 14px;
+            }
+
+            .form-container {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% extends "nav.html" %}
+
+    {% block content %}
+    <div class="form-container">
+        <div class="image-container">
+            {% if media_type == 'image' %}
+                <img id="my-image" src="{{ url_for('display', filename=image_path, _external=True) }}" alt="Image" />
+            {% endif %}
+        </div>
+
+        <div class="results-container">
+            <h2>Detected Disease</h2>
+            <ul>
+                {% for label in detected_labels %}
+                    <li>Disease Name: {{ label }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

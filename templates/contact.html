@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon/logo.ico') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+            height: 100vh;
+            background-image: url("{{ url_for('static', filename='images/bodyback.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative; /* Ensure overlay is positioned relative to body */
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8); /* White background with 50% opacity */
+            z-index: -1; /* Ensure it's behind the content */
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            /* min-height: calc(100vh - 70px); */ /* Remove or modify this */
+            position: relative;
+            border-radius: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .container1 {
+            border-radius: 20px; /* Apply rounded corners to the inner container */
+            display: flex;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden; /* Ensures child elements respect the border radius */
+        }
+
+        .form-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .left-container, .right-container {
+            flex: 1;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 20px; /* Uniformly curved edges for both sides */
+        }
+
+        .left-inner-container {
+            text-align: center;
+            line-height: 22px;
+        }
+
+        .contact-image {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-info i {
+            margin-right: 10px;
+            color: white; /* Change icon color to blue */
+            background-color: #2196F3; /* Light blue background for circle */
+            border-radius: 50%; /* Circular shape */
+            padding: 10px; /* Space around the icon */
+            font-size: 1.2rem; /* Adjust size as needed */
+        }
+
+        .right-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 1px;
+        }
+
+        .right-inner-container {
+            width: 100%;
+            max-width: 500px; /* Limit width for larger screens */
+            text-align: center;
+        }
+
+        h5 {
+            font-size: 25px;
+            margin-bottom: 1rem;
+            color: #46999A;
+        }
+
+        input, textarea {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            font-size: 0.8rem;
+            border-radius: 10px; /* Rounded edges for input fields */
+        }
+
+        input:focus, textarea:focus {
+            outline: 1px solid teal;
+        }
+
+        button {
+            border-radius: 20px;
+            border: 1px solid #0CBBC7;
+            background-color: #0CBBC7;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.7;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .left-container {
+                display: none;
+            }
+
+            .lg-view {
+                display: none;
+            }
+        }
+
+        @media only screen and (min-width: 600px) {
+            .sm-view {
+                display: none;
+            }
+        }
+
+        form p {
+            text-align: left;
+        }
+
+        .right-inner-container h5 {
+            text-align: left; /* Align the h5 element to the left */
+        }
+    </style>
+</head>
+<body> 
+    <div class="overlay"></div> <!-- Overlay element -->
+    {% extends "nav.html" %}
+
+    {% block content %}
+    <div class="page-container">
+        <div class="container1">
+            <div class="form-container">
+                <div class="left-container">
+                    <div class="left-inner-container">
+                        <img src="{{ url_for('static', filename='images/image-42.png') }}" class="contact-image">
+                        <div class="contact-info">
+                            <p><i class="fas fa-phone-alt"></i> 09171697421</p>
+                            <p><i class="fas fa-envelope"></i> aquadetect@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-container">
+                    <div class="right-inner-container">
+                        <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                            <h5 class="lg-view">Get in Touch</h5>
+                            <input type="hidden" name="access_key" value="a0538ad4-7c49-495d-bdfa-26467331a16f">
+                            <p>Any question or remarks? Let us know!</p>
+                            <br>
+                            <input type="text" name="name" placeholder="Name" required />
+                            <input type="email" name="email" placeholder="Email" required />
+                            <textarea rows="4" name="message" placeholder="Message" required></textarea>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+</body>
+</html>

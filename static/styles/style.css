@@ -1,0 +1,272 @@
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+}
+
+/* Variables */
+:root {
+  --blue: #0071FF;
+  --light-blue: #EDFEFF;
+  --dark-blue: #005DD1;
+  --grey: #f2f2f2;
+}
+
+/* Body */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Wrapper */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center vertically */
+  width: 100%;
+  max-width: 1200px; /* Set the maximum width */
+  margin: 0 auto; /* Center the container horizontally */
+  padding: 0;
+  min-height: calc(100vh - 70px); /* Adjust for navbar height */
+  background: #EDFEFF;
+  transition: opacity 0.4s ease 0.1s;
+}
+
+/* Container */
+.container {
+  max-width: 400px;
+  width: 100%;
+  background: #fff;
+  padding: 30px;
+  border-radius: 30px;
+}
+
+/* Image Area */
+.img-area {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  background: var(--grey);
+  margin-bottom: 30px;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.img-area .icon {
+  font-size: 100px;
+}
+
+.img-area h3 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.img-area p {
+  color: #999;
+}
+
+.img-area p span {
+  font-weight: 600;
+}
+
+.img-area img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 100;
+}
+
+.img-area::before {
+  content: attr(data-img);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .5);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: all .3s ease;
+  z-index: 200;
+}
+
+.img-area.active:hover::before {
+  opacity: 1;
+}
+
+.select-image {
+  display: block;
+  width: 100%;
+  padding: 16px 0;
+  border-radius: 15px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 500;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.select-image:hover {
+  background: var(--dark-blue);
+}
+
+.upload-image {
+  display: block;
+  width: 100%;
+  padding: 16px 0;
+  border-radius: 15px;
+  background: #46999A; /* Green background color */
+  color: #fff;
+  font-weight: 500;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all .3s ease;
+  text-align: center; /* Center the button text */
+  margin-top: 20px;
+}
+
+.upload-image:hover {
+  background: var(--dark-blue); /* Darker blue on hover */
+}
+
+/* Landing Page */
+.header {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.title {
+  font-size: 44px;
+  font-weight: bold;
+  margin-bottom: 50px;
+  margin-top: 70px;
+}
+
+.intro, .intro-2 {
+  max-width: 500px; /* Adjust as needed */
+  margin: 0 auto; /* Center horizontally if desired */
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.green-button {
+  background-color: #0CBBC7;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.fish-image {
+  display: block;
+  margin: 20px auto;
+  max-width: 100%;
+  margin-top: 40px;
+}
+
+.mission {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+  max-width: 800px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Landing Page Cards */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 0 10px;
+}
+
+.row {margin: 0 -5px;}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+  }
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  text-align: center;
+  background-color: #ffffff;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s;
+  height: 450px; /* Set a fixed height for the cards */
+  min-width: 150px;
+}
+
+.card img {
+  max-width: 100%; /* Ensure image fits within the card */
+  height: auto;
+  border-radius: 0px;
+  margin-bottom: 10px; /* Add some spacing below the image */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Zoom in a little on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Add a subtle shadow on hover */
+}
+
+.card-header {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #0d0d0d;
+  margin-bottom: 1.5rem;
+}
+
+.card-text {
+  font-size: 1.5rem;
+  letter-spacing: 0.1rem;
+  line-height: 1.25;
+  color: #3d3d3d;
+  margin-bottom: 2rem;
+}
+
+
+a {
+  color : white;
+}

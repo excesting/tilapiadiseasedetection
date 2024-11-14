@@ -1,0 +1,168 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+  }
+  
+  /* Variables */
+  :root {
+    --blue: #0071FF;
+    --light-blue: #EDFEFF;
+    --dark-blue: #005DD1;
+    --grey: #f2f2f2;
+    --green: #46999A;
+    --white: #FFFFFF;
+  }
+  
+  /* Body */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--light-blue);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Wrapper (common container) */
+  .wrapper, .container, .page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    background: var(--light-blue);
+    transition: opacity 0.4s ease 0.1s;
+  }
+  
+  /* Form Containers */
+  .form-container {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .left-container, .right-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Image Area */
+  .img-area {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 240px;
+    background: var(--grey);
+    margin-bottom: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .img-area::before {
+    content: attr(data-img);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    color: var(--white);
+    font-weight: 500;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: all .3s ease;
+  }
+  
+  .img-area:hover::before {
+    opacity: 1;
+  }
+  
+  /* Buttons */
+  button, .select-image, .upload-image {
+    padding: 16px 20px;
+    border-radius: 15px;
+    border: none;
+    background: var(--blue);
+    color: var(--white);
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  button:hover, .select-image:hover, .upload-image:hover {
+    background: var(--dark-blue);
+  }
+  
+  .upload-image {
+    background: var(--green);
+    margin-top: 20px;
+  }
+  
+  /* Card Styles */
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    text-align: center;
+    background-color: var(--white);
+    transition: transform 0.3s, box-shadow 0.2s;
+    border-radius: 10px;
+    height: 450px; 
+  }
+  
+  .card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    font-size: 2rem;
+    color: #0d0d0d;
+  }
+  
+  .card-text {
+    font-size: 1.5rem;
+    color: #3d3d3d;
+    line-height: 1.25;
+  }
+  
+  /* Responsive Layout */
+  @media (max-width: 600px) {
+    .wrapper, .container, .page-container {
+      max-width: 100%;
+      padding: 20px;
+    }
+    
+    .column {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+  

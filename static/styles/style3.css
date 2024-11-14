@@ -1,0 +1,238 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center vertically */
+  width: 100%;
+ 
+  max-width: 1200px; /* Set the maximum width */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 0;
+
+  min-height: calc(100vh); /* Adjust for navbar height */
+  background: #EDFEFF;
+  transition: opacity 0.4s ease 0.1s;
+}
+
+/* NAVIGATION BAR 
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 15px;
+  background-color: #F7F7F7;
+  position: absolute;
+  z-index: 10;
+  margin: 0 auto; 
+  top: 0; 
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  margin-right: 10px;
+}
+
+nav {
+  display: flex;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  margin-left: 20px; 
+  float: left;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  font-size: 17px;
+  text-align: right; 
+  display: block;
+}
+
+.logo span {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+ End of navigation Bar */
+
+
+ 
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.container1 {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  min-height: 480px;
+  min-width: 370px;
+}
+
+h5 {
+  font-size: 25px;
+  margin-bottom: 1rem;
+  color: #46999A;
+}
+
+.form-container {
+  display: flex;
+}
+
+.left-container {
+  flex: 1;
+  height: 480px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the start to move image up 
+  padding-top: 20px; /* Add padding to adjust the position of the image */
+  color: black;
+}
+
+.left-container p {
+  font-size: 0.9rem;
+}
+
+.right-container {
+  display: flex;
+  flex: 1;
+  height: 480px;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.right-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%; /* Ensure the line spans the full height */
+  width: 1px;
+  background-color: #ccc;
+}
+
+.right-inner-container {
+  width: 70%;
+  height: 80%;
+  text-align: center;
+}
+
+.left-inner-container {
+  height: 50%;
+  width: 80%;
+  text-align: center;
+  line-height: 22px;
+}
+
+.contact-image {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+}
+
+.contact-info {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.contact-info p {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.contact-info i {
+  margin-right: 10px;
+  color: white; /* Change icon color to blue */
+  background-color: #2196F3; /* Light blue background for circle */
+  border-radius: 50%; /* Circular shape */
+  padding: 10px; /* Space around the icon */
+  font-size: 1.2rem; /* Adjust size as needed*/ 
+}
+
+input, textarea {
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+  font-size: 0.8rem;
+}
+
+input:focus, textarea:focus {
+  outline: 1px solid teal;
+}
+
+button {
+  border-radius: 20px;
+  border: 1px solid #46999A;
+  background-color: #46999A;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.7;
+}
+
+@media only screen and (max-width: 600px) {
+  .left-container {
+    display: none;
+  }
+
+  .lg-view {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .sm-view {
+    display: none;
+  }
+}
+
+form p {
+  text-align: left;
+}
+
+.right-inner-container h5 {
+  text-align: left; /* Align the h2 elements to the left */
+}

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navigation Bar</title>
+<link rel="icon" href="{{ url_for('static', filename='icon/logo.ico') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+/* General Styles */
+* {
+  text-decoration: none;
+  font-family: 'Plus Jakarta Sans', Helvetica, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background: transparent;
+  font-family: Calibri;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.9); /* Background color on scroll */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navdiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 90px;
+  padding: 0 20px;
+}
+
+.navdiv ul {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navdiv ul li {
+  margin-left: 20px;
+  position: relative;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navdiv ul li a {
+  color: black;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 7px 15px;
+  display: block;
+  border-radius: 20px;
+  transition: color 0.3s ease, transform 0.3s ease;
+  margin-right: 10px;
+}
+
+.navdiv ul li a:hover {
+  transform: scale(1.1);
+}
+
+.navdiv ul li.active a {
+  background-color: white;
+  color: #0CBBC7;
+  border: 2px solid #0CBBC7;
+  border-radius: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;
+  margin-left: 20px;
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.1);
+}
+
+.logo span {
+  font-size: 24px;
+  color: black;
+  margin-left: 10px;
+}
+
+/* Responsive Styles */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: black;
+  margin: 5px 0;
+  transition: 0.4s;
+}
+
+@media (max-width: 768px) {
+  .navdiv ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    top: 70px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .navdiv ul.show {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .navdiv {
+    padding: 0 10px;
+  }
+
+  .logo img {
+    margin-left: 10px;
+  }
+}
+
+.main-content {
+  padding-top: 70px;
+}
+</style>
+<script>
+  window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    navbar.classList.toggle('scrolled', window.scrollY > 0);
+  });
+
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.navdiv ul');
+
+    menuToggle.addEventListener('click', function() {
+      navLinks.classList.toggle('show');
+    });
+  });
+</script>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navdiv">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Aquadetect Logo">
+      <span>AQUADETECT</span>
+    </div>
+    <div class="menu-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul>
+      <li class="{{ 'active' if request.path == url_for('hello_world') else '' }}"><a href="{{url_for('hello_world')}}">HOME</a></li>
+      <li class="{{ 'active' if request.path == url_for('detect') else '' }}"><a href="{{url_for('detect')}}">DISEASE DETECTOR</a></li>
+      <li class="{{ 'active' if request.path == url_for('contact') else '' }}"><a href="{{url_for('contact')}}">CONTACT US</a></li>
+
+      {% if session.get('logged_in') %}
+      <li class="{{ 'active' if request.path == url_for('test') else '' }}"><a href="{{url_for('test')}}">RECORDS</a></li>
+      <li class="{{ 'active' if request.path == url_for('edit_cards') else '' }}"><a href="{{url_for('edit_cards')}}">EDIT CARDS</a></li>
+      <li><a href="{{url_for('logout')}}">LOGOUT</a></li>
+      {% else %}
+      <li class="{{ 'active' if request.path == url_for('login') else '' }}"><a href="{{url_for('login')}}">LOGIN</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+<div class="main-content">
+{% block content %}
+{% endblock %}
+</div>
+</body>
+</html>

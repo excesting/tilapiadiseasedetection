@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Cards</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon/logo.ico') }}">
+    <style>
+        /* Additional CSS specific to edit_cards.html */
+        body {
+            margin: 0;
+            height: 100vh; /* Ensure body takes the full height of the viewport */
+            background: url('{{ url_for('static', filename='images/bodyback.jpeg') }}') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Overlay for reduced opacity */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8); /* White background with 80% opacity */
+            z-index: -1; /* Ensure it's behind the content */
+        }
+
+        .form-container {
+            position: absolute; /* Change to absolute positioning */
+            top: 50%; /* Position from the top */
+            left: 50%; /* Position from the left */
+            transform: translate(-50%, -50%); /* Center the container */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            box-sizing: border-box; /* Include padding in the height */
+            width: 90%; /* Set width to 90% of the viewport */
+            max-width: 800px; /* Limit maximum width */
+            margin: auto; /* Center the form */
+            background-color: white; /* Add white background */
+            border-radius: 15px; /* Rounded corners for uniformity */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+        }
+
+        form {
+            width: 100%;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px; /* Add some space below the label */
+            font-weight: bold;
+            font-size: 18px; /* Increase font size for better readability */
+        }
+
+        .form-group textarea,
+        .form-group input[type="file"],
+        .form-group select {
+            width: 100%;
+            padding: 15px; /* Increase padding for more space */
+            border: 1px solid #ddd;
+            border-radius: 8px; /* Slightly larger border-radius */
+            box-sizing: border-box;
+            font-size: 16px; /* Increase font size for readability */
+        }
+
+        .form-group textarea {
+            resize: vertical; /* Allow vertical resizing only */
+            min-height: 150px; /* Set a minimum height for the textarea */
+        }
+
+        button {
+            background-color: #0CBBC7;
+            color: white;
+            border: none;
+            padding: 15px 30px; /* Increase padding for a larger button */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px; /* Larger font size for the button */
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 8px; /* Larger border-radius for the button */
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    {% extends "nav.html" %}
+    {% block content %}
+    <div class="form-container">
+        <h1>Edit Landing Page Card Contents</h1>
+        <br>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="card_id">Select Card to Edit:</label>
+                <select name="card_id" required>
+                    {% for card in cards %}
+                    <option value="{{ card.id }}">Card {{ card.id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea name="description" rows="4" required>{{ cards[0].description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image:</label>
+                <input type="file" name="image">
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    {% endblock %}
+</body>
+</html>

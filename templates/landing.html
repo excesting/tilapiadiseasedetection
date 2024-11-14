@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquadetect</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon/logo.ico') }}">
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+        }
+
+        /* Variables */
+        :root {
+            --blue: #0071FF;
+            --light-blue: #EDFEFF;
+            --dark-blue: #005DD1;
+            --grey: #f2f2f2;
+        }
+
+        /* Body */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: #FAFAFA;
+        }
+
+        /* Banner */
+        .banner {
+            width: 100%;
+            height: 400px; /* Adjust height as needed */
+            background-color: #FAFAFA;
+            width: 100%;
+            height: 1200px;
+            background: url("{{ url_for('static', filename='images/bannerback.jpeg') }}") no-repeat center center;
+            background-size:100% 700px; /* Ensures the background image covers the entire element */
+            position: absolute; /* Fix the banner to the top */
+            top: 0;
+            left: 0;
+            z-index: 1; /* Ensures the banner is behind other content */
+        }
+
+        /* Header */
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 120px 20px 40px; /* Adjust top padding to avoid overlap with the navbar */
+            position: relative; /* Position relative within the banner */
+            z-index: 2; /* Ensures the header content is above the banner */
+            color: black; /* Adjust text color for contrast */
+        }
+
+        .title {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .intro, .intro-2 {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .green-button {
+            background-color: #0CBBC7;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .green-button a {
+            color: white;
+        }
+
+        .fish-image {
+            display: block;
+            margin: 30px auto;
+            max-width: 80%;
+            height: 250px;
+        }
+
+        .mission {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 30px;
+            max-width: 800px;
+            font-weight: bold;
+            margin: 20px auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 400px; /* Ensure this margin is greater than or equal to the height of the banner */
+            padding-bottom: 20px; /* Add some padding at the bottom if needed */
+        }
+
+        /* Responsive Cards */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .column {
+            flex: 1 1 300px;
+            max-width: 33%;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+
+        .card img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .column {
+                max-width: 100%;
+                flex: 1 1 100%;
+                margin-bottom: 20px;
+            }
+            .intro, .intro-2 {
+                max-width: 90%;
+                font-size: 16px;
+            }
+            .mission {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% extends "nav.html" %}
+
+    {% block content %}
+    <div class="banner">
+        <div class="header">
+            <div class="title">Save Aqua Culture</div>
+            <div class="intro">
+                Welcome to Aqua Detect, your partner in ensuring Nile tilapia health and quality. We empower fishermen to detect fish health issues swiftly, ensuring top-quality fish for all.
+            </div>
+            <div class="intro-2">
+                Join us in making a difference at Aqua Detect!
+            </div>
+            <div class="button-container">
+                <button class="green-button"><a href="{{ url_for('detect') }}">Get Started</a></button>
+            </div>
+            <img class="fish-image" src="{{ url_for('static', filename='images/image-46.png') }}" alt="Fish">
+            <div class="mission">
+                "Explore our goals and mission to understand how we're making a difference."
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="row">
+            {% for card in cards %}
+            <div class="column">
+                <div class="card">
+                    <img src="{{ url_for('static', filename=card.image_path.replace('\\', '/').split('static/')[1]) }}" alt="Card Image">
+                    <p>{{ card.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

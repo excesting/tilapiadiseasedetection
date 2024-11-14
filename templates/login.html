@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquadetect - Login</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon/logo.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN -->
+    <style>
+        :root {
+            --blue: #0071FF;
+            --light-blue: #EDFEFF;
+            --dark-blue: #005DD1;
+            --grey: #f2f2f2;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--light-blue);
+            font-family: 'Poppins', sans-serif;
+            padding-top: 70px; /* Adjust for navbar height */
+            margin: 0;
+            background-color: #FAFAFA;
+        }
+
+        /* Background Image with reduced opacity */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{{ url_for('static', filename='images/bodyback.jpeg') }}') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.2; /* Reduced opacity for the background image */
+            z-index: -1; /* Ensure the background is behind the content */
+        }
+
+        .page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* Increase width, but keep it responsive */
+    max-width: 600px; /* Increase max-width for larger screens */
+    padding: 50px; /* Adjust padding for more spacing inside */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Slightly increase shadow for emphasis */
+    height: auto; /* Let the height adjust based on content */
+    margin: 20px auto; /* Keep it centered */
+}
+
+
+        .login-page {
+            text-align: center; /* Center content horizontally */
+        }
+
+        .login-page img.logo {
+            display: block; /* Ensures proper handling as block element */
+            margin: 0 auto; /* Center the image */
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .login-page h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .login-page .input-field-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .login-page .input-field-container i {
+            padding: 10px;
+            color: #888;
+        }
+
+        .login-page .input-field {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .login-page .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-page .btn-login:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .login-page .forgot-password {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .login-page .forgot-password a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+
+        .login-page .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .flash-message {
+            color: red;
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    {% extends "nav.html" %}
+
+    {% block content %}
+    <div class="page-container">
+        <div class="login-page">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AQUADETECT Logo" class="logo">
+            <h1>Sign In</h1>
+
+            <!-- Display flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-message">
+                        {% for category, message in messages %}
+                            <p class="{{ category }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Login Form -->
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="input-field-container">
+                    <i class="fas fa-user"></i>
+                    <input 
+                        type="text"
+                        name="username"
+                        placeholder="Username" 
+                        class="input-field"
+                        required
+                    />
+                </div>
+                <div class="input-field-container">
+                    <i class="fas fa-lock"></i>
+                    <input
+                        type="password"
+                        name="password" 
+                        placeholder="Password"
+                        class="input-field"
+                        required
+                    />
+                </div>
+                <input type="submit" value="Login" class="btn-login" />
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>
