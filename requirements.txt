@@ -1,0 +1,14 @@
+argparse
+Pillow
+torch
+opencv-python
+numpy
+tensorflow
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+Flask-Migrate
+werkzeug
+requests
+shutil
+ultralytics
