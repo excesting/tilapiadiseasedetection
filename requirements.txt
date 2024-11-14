@@ -10,5 +10,4 @@ SQLAlchemy
 Flask-Migrate
 werkzeug
 requests
-shutil
 ultralytics
