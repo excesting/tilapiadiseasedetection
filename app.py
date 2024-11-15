@@ -423,9 +423,12 @@ def webcam_feed():
     return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Flask app exposing yolov8 models")
-    parser.add_argument("--port", default=5000, type=int, help="port number")
+    parser.add_argument("--port", default=int(os.environ.get("PORT", 5000)), type=int, help="port number")
     args = parser.parse_args()
+    
     model = YOLO("best.pt")
     app.run(host="0.0.0.0", port=args.port, debug=True)
+
