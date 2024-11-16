@@ -498,8 +498,14 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Flask app exposing yolov8 models")
-    parser.add_argument("--port", default=5000, type=int, help="port number")
-    args = parser.parse_args()
+    # Remove the argparse logic since AWS App Runner will manage the port dynamically.
+    # You can still use argparse if you want to set a default port for local development.
+    
+    # Get the port from the environment, default to 8080 if not found
+    port = int(os.environ.get("PORT", 8080))  # AWS App Runner sets the PORT env variable
+    
+    # Initialize the YOLO model
     model = YOLO("best.pt")
-    app.run(host="0.0.0.0", port=args.port, debug=True)
+    
+    # Run the Flask app on all available IPs (0.0.0.0) and the dynamically assigned port
+    app.run(host="0.0.0.0", port=port, debug=True)
