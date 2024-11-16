@@ -32,6 +32,12 @@ import shutil
 import time
 import glob
 import datetime
+import sendgrid
+from sendgrid.helpers.mail import Mail, Email, To, Content
+import os
+import random
+from flask import flash
+from werkzeug.security import generate_password_hash
 
 from ultralytics import YOLO
 
@@ -67,6 +73,12 @@ class Card(db.Model):
     image_path = db.Column(db.String(120), nullable=False)  # Path to the image
     description = db.Column(db.Text, nullable=False)  # Description text for the card
 
+class PasswordReset(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
+    code = db.Column(db.String(6), nullable=False)  # 6-digit code
+    expires_at = db.Column(db.DateTime, nullable=False)
+
 # Function to initialize default cards in the database
 def initialize_cards():
     with app.app_context():  # Ensure the application context is available
@@ -90,6 +102,94 @@ def initialize_cards():
 with app.app_context():
     db.create_all()
     initialize_cards()
+
+
+# SendGrid API key (ensure this is stored securely)
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+# Function to send OTP
+def send_otp(email):
+    otp = random.randint(100000, 999999)  # Generate a 6-digit OTP
+
+    # Create the email content
+    from_email = Email("your_verified_sendgrid_email@example.com")
+    to_email = To(email)
+    subject = "Your OTP for password reset"
+    content = Content("text/plain", f"Your OTP code is {otp}. It will expire in 10 minutes.")
+
+    # Create the Mail object
+    mail = Mail(from_email, to_email, subject, content)
+
+    try:
+        # Initialize SendGrid client and send email
+        sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        response = sg.send(mail)
+        
+        if response.status_code == 202:
+            flash("OTP sent to your email.", "info")
+            return otp  # Optionally return OTP if you want to store/verify it
+        else:
+            flash(f"Error sending email: {response.body}", "danger")
+            return None
+    except Exception as e:
+        flash(f"Error sending email: {str(e)}", "danger")
+        return None
+
+@app.route('/reset-password', methods=['GET', 'POST'])
+def reset_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = UserLogin.query.filter_by(email=email).first()
+
+        if user:
+            otp = send_otp(email)
+            if otp:
+                expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
+                password_reset_entry = PasswordReset(email=email, code=str(otp), expires_at=expiration_time)
+                db.session.add(password_reset_entry)
+                db.session.commit()
+                return redirect(url_for('verify_otp', email=email))  # Correct URL for verify_otp
+        else:
+            flash('Email not found. Please try again.', 'danger')
+            return render_template('reset_password.html')
+
+    return render_template('reset_password.html')
+
+
+
+@app.route('/change-password', methods=['GET', 'POST'])
+def change_password():
+    email = request.args.get('email')
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        user = UserLogin.query.filter_by(email=email).first()
+
+        if user:
+            user.password = generate_password_hash(new_password)
+            db.session.commit()
+            flash('Your password has been changed successfully.', 'success')
+            return redirect(url_for('login'))  # Correct URL for login
+        else:
+            flash('User not found. Please try again.', 'danger')
+
+    return render_template('change_password.html', email=email)
+
+
+@app.route('/verify-otp', methods=['GET', 'POST'])
+def verify_otp():
+    email = request.args.get('email')
+    if request.method == 'POST':
+        entered_otp = request.form['otp']
+        password_reset = PasswordReset.query.filter_by(email=email, code=entered_otp).first()
+
+        if password_reset and password_reset.expires_at > datetime.datetime.utcnow():
+            flash("OTP verified successfully. You can now change your password.", "success")
+            return redirect(url_for('change_password', email=email))  # Correct URL for change_password
+        else:
+            flash("Invalid or expired OTP. Please try again.", "danger")
+
+    return render_template('verify_otp.html', email=email)
+
 
     
 
@@ -138,6 +238,12 @@ def login():
 
 @app.route("/test")
 def test():
+        # Check if the user is logged in
+    if 'logged_in' not in session or not session['logged_in']:
+        # If not logged in, redirect to login page
+        flash('Please log in to access this page.', 'danger')
+        return redirect(url_for('login'))
+    
     # Get filter parameters from the query string
     filter_location = request.args.get('location', '')
     filter_disease = request.args.get('disease', '')
@@ -193,6 +299,11 @@ app.config['UPLOAD_FOLDER'] = 'static/images'
 
 @app.route('/edit_cards', methods=['GET', 'POST'])
 def edit_cards():
+    # Check if the user is logged in
+    if 'logged_in' not in session or not session['logged_in']:
+        flash("Please log in to access this page.", "warning")
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         # Get form data
         card_id = int(request.form['card_id'])
@@ -202,24 +313,27 @@ def edit_cards():
         # Find the card to update
         card = Card.query.get(card_id)
         if card:
+            # Update the card's description
             card.description = description
 
             if image_file:
-                # Save the new image
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_file.filename)
+                # Save the new image file
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image_file.filename))
                 image_file.save(image_path)
                 card.image_path = image_path
 
             # Save changes to the database
             db.session.commit()
+            flash('Card updated successfully!', 'success')
+        else:
+            flash('Card not found.', 'danger')
 
-        # Redirect back to the landing page
+        # Redirect to the landing page after the update
         return redirect(url_for('landing'))
 
     # Fetch current cards for the form
     cards = Card.query.all()
     return render_template('edit_cards.html', cards=cards)
-
 
 
 @app.route("/detect", methods=["GET", "POST"])
@@ -334,20 +448,33 @@ def predict_img():
 @app.route("/<path:filename>")
 def display(filename):
     folder_path = "runs/detect"
+    
+    # Check if the directory exists
+    if not os.path.isdir(folder_path):
+        return render_template('404.html'), 404
+    
     subfolders = [
         f
         for f in os.listdir(folder_path)
         if os.path.isdir(os.path.join(folder_path, f))
     ]
+    
+    # If no subfolders are found, return 404
+    if not subfolders:
+        return render_template('404.html'), 404
+    
     latest_subfolder = max(
         subfolders, key=lambda x: os.path.getctime(os.path.join(folder_path, x))
     )
+    
     directory = os.path.join(folder_path, latest_subfolder)
-    print("printing directory: ", directory)
     files = os.listdir(directory)
+    
+    # If no files are found in the latest subfolder, return 404
+    if not files:
+        return render_template('404.html'), 404
+    
     latest_file = files[0]
-
-    print(latest_file)
 
     image_path = os.path.join(directory, latest_file)
 
@@ -360,67 +487,14 @@ def display(filename):
     else:
         return "Invalid file format"
 
+    
 
-def get_frame():
-    folder_path = os.getcwd()
-    mp4_files = "output.mp4"
-    print("files being read...")
-    video = cv2.VideoCapture(mp4_files)  # detected video path
-    while True:
-        success, frame = video.read()
-        if not success:
-            print("file not being read")
-            break
-        else:
-            ret, buffer = cv2.imencode(".jpg", frame)
-            frame = buffer.tobytes()
-
-        yield (
-            b"--frame\r\n"
-            b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n"
-        )
-        time.sleep(0.1)  # Control the frame rate to display one frame every 100 milliseconds:
+@app.errorhandler(404)
+def page_not_found(error):
+    app.logger.error(f"404 error: {request.url}")  # Optional logging
+    return render_template('404.html'), 404
 
 
-
-# function to display the detected objects video on html page
-@app.route("/video_feed")
-def video_feed():
-    # folder_path = os.getcwd()
-    # mp4_file = "output.mp4"
-    # video_path = os.path.join(folder_path, mp4_file)
-    # return send_file(video_path, mimetype="video")
-    return Response(get_frame(), mimetype="multipart/x-mixed-replace; boundary=frame")
-
-
-@app.route("/webcam_feed")
-def webcam_feed():
-    cap = cv2.VideoCapture(0) # 0 for camera
-
-    def generate():
-        while True:
-            success, frame = cap.read()
-            if not success:
-                break
-
-            # Perform object detection on the frame
-            img = Image.fromarray(frame)
-            model = YOLO("best.pt")
-            results = model(img, save=True)
-
-            # Plot the detected objects on the frame
-            res_plotted = results[0].plot()
-            img_BGR = cv2.cvtColor(res_plotted, cv2.COLOR_RGB2BGR)
-
-            # Convert the frame to JPEG format for streaming
-            ret, buffer = cv2.imencode(".jpg", img_BGR)
-            frame = buffer.tobytes()
-
-            yield (
-                b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n"
-            )
-
-    return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 if __name__ == "__main__":
