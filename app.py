@@ -5,7 +5,6 @@ from PIL import Image
 import torch
 import cv2
 import numpy as np
-import tensorflow as tf
 from re import DEBUG, sub
 from flask import (
     Flask,
@@ -20,7 +19,6 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
-from flask_migrate import Migrate
 from werkzeug.utils import secure_filename, send_from_directory
 from werkzeug.security import check_password_hash
 import os
